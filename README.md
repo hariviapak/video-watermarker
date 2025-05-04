@@ -94,4 +94,11 @@ For issues or feature requests, please open an issue on the GitHub repository.
 
 ## License
 
-Copyright © 2025 Hari Viapak Garg. All rights reserved. 
+This project is licensed under the **MIT License**.  
+See [LICENSE](https://github.com/hariviapak/video-watermarker/blob/main/LICENSE) for full text.
+
+**Summary**:  
+✔ Free to use, modify, and distribute  
+✔ Permits private/commercial use  
+✔ Only requires attribution  
+❌ No liability/warranty  
