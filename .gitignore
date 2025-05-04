@@ -1,0 +1,56 @@
+# ========================
+# Python & PyInstaller
+# ========================
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+*.egg-info/
+*.so
+.Python
+build/
+dist/
+add_watermarking.spec
+
+# ========================
+# Virtual Environments
+# ========================
+venv/
+.venv/
+env/
+ENV/
+pip-selfcheck.json
+
+# ========================
+# IDE & Editor
+# ========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-*
+
+# ========================
+# OS & Temp Files
+# ========================
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+
+# ========================
+# Media/Output Files (Auto-generated)
+# ========================
+*.mp4
+*.png
+*.jpg
+
+
+# ========================
+# Project-Specific Exclusions
+# ========================
+app_old.cpython-311.pyc
+temp_watermarked.mp4
+watermarked_output.mp4
+final_output.mp4
+file_version_info.txt
