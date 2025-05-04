@@ -32,7 +32,8 @@ jobs:
           pyinstaller --onefile --windowed main.py
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: ${{ runner.os }}-video-watermarker
           path: dist/
+
