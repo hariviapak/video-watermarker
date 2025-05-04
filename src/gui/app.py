@@ -14,11 +14,11 @@ class VideoWatermarkerApp:
         self.input_video_path = tk.StringVar()
         self.logo_path = tk.StringVar()
         self.output_video_path = tk.StringVar()
-        self.scale_value = tk.DoubleVar(value=1.0)
-        self.speed_value = tk.DoubleVar(value=1.0)
-        self.opacity_value = tk.DoubleVar(value=1.0)
-        self.target_size = tk.IntVar(value=10)
-        self.quality_value = tk.IntVar(value=28)
+        self.scale_value = tk.DoubleVar(value=0.08)
+        self.speed_value = tk.DoubleVar(value=5.0)
+        self.opacity_value = tk.DoubleVar(value=0.25)
+        self.target_size = tk.DoubleVar(value=10.0)
+        self.quality_value = tk.IntVar(value=23)
         self.should_cancel = False
         self.enable_compression = tk.BooleanVar(value=True)
 
@@ -76,9 +76,10 @@ class VideoWatermarkerApp:
         settings_frame = ttk.LabelFrame(self.root, text="Settings")
         settings_frame.pack(padx=10, pady=10, fill="x")
 
-        self.create_slider(settings_frame, "Scale:", self.scale_value, 0, 0.1, 2.0)
-        self.create_slider(settings_frame, "Speed:", self.speed_value, 1, 0.1, 5.0)
-        self.create_slider(settings_frame, "Opacity:", self.opacity_value, 2, 0.0, 1.0)
+        self.create_slider(settings_frame, "Scale:", self.scale_value,   0, 0.02, 0.20, 0.01)
+        self.create_slider(settings_frame, "Speed:", self.speed_value,   1, 1.0,  10.0, 0.1)
+        self.create_slider(settings_frame, "Opacity:", self.opacity_value, 2, 0.05, 1.0, 0.01)
+
 
         # Compression Toggle
         ttk.Checkbutton(
@@ -88,15 +89,18 @@ class VideoWatermarkerApp:
             command=self.toggle_compression_settings
         ).grid(row=3, column=0, columnspan=2, sticky=tk.W, pady=(10, 5))
 
-        # Target Size
-        ttk.Label(settings_frame, text="Target Size (MB):").grid(row=4, column=0, sticky=tk.W)
-        self.target_size_scale = ttk.Scale(settings_frame, from_=1, to=100, variable=self.target_size, orient=tk.HORIZONTAL)
-        self.target_size_scale.grid(row=4, column=1, sticky=(tk.W, tk.E), padx=5)
+        self.create_slider(settings_frame, "Target Size (MB):", self.target_size, 4, 10.0, 1000.0, 10, slider_name="target_size_scale")
+        self.create_slider(settings_frame, "Quality (0-51):", self.quality_value, 5, 0, 51, 1, slider_name="quality_scale")
 
-        # Quality
-        ttk.Label(settings_frame, text="Quality (0-51):").grid(row=5, column=0, sticky=tk.W)
-        self.quality_scale = ttk.Scale(settings_frame, from_=0, to=51, variable=self.quality_value, orient=tk.HORIZONTAL)
-        self.quality_scale.grid(row=5, column=1, sticky=(tk.W, tk.E), padx=5)
+        # # Target Size
+        # ttk.Label(settings_frame, text="Target Size (MB):").grid(row=4, column=0, sticky=tk.W)
+        # self.target_size_scale = ttk.Scale(settings_frame, from_=1, to=100, variable=self.target_size, orient=tk.HORIZONTAL)
+        # self.target_size_scale.grid(row=4, column=1, sticky=(tk.W, tk.E), padx=5)
+
+        # # Quality
+        # ttk.Label(settings_frame, text="Quality (0-51):").grid(row=5, column=0, sticky=tk.W)
+        # self.quality_scale = ttk.Scale(settings_frame, from_=0, to=51, variable=self.quality_value, orient=tk.HORIZONTAL)
+        # self.quality_scale.grid(row=5, column=1, sticky=(tk.W, tk.E), padx=5)
 
         # Initially enable/disable based on toggle
         self.toggle_compression_settings()
@@ -106,10 +110,22 @@ class VideoWatermarkerApp:
         self.target_size_scale.configure(state=state)
         self.quality_scale.configure(state=state)
 
-    def create_slider(self, parent, label, variable, row, min_val, max_val):
-        ttk.Label(parent, text=label).grid(row=row, column=0, sticky=tk.W)
-        scale = ttk.Scale(parent, from_=min_val, to=max_val, variable=variable, orient=tk.HORIZONTAL)
-        scale.grid(row=row, column=1, sticky=(tk.W, tk.E), padx=5)
+    # def create_slider(self, parent, label, variable, row, min_val, max_val, step):
+    #     tk.Label(parent, text=label).grid(row=row, column=0, sticky=tk.W)
+    #     scale = tk.Scale(parent, from_=min_val, to=max_val, variable=variable, orient=tk.HORIZONTAL, resolution=step)
+    #     scale.grid(row=row, column=1, sticky="we", padx=5)
+
+    def create_slider(self, parent, label, variable, row, min_val, max_val, step, slider_name=None):
+        tk.Label(parent, text=label).grid(row=row, column=0, sticky=tk.W)
+        scale = tk.Scale(parent, from_=min_val, to=max_val, variable=variable, orient=tk.HORIZONTAL, resolution=step, showvalue=False)
+        scale.grid(row=row, column=1, sticky="we", padx=5)
+        value_label = ttk.Label(parent, text=str(variable.get()))
+        value_label.grid(row=row, column=2, padx=5)
+        def on_slide(val):
+            value_label.config(text=f"{float(val):.2f}" if step < 1 else f"{int(float(val))}")
+        scale.config(command=on_slide)
+        if slider_name:
+            setattr(self, slider_name, scale)
 
     def create_buttons(self):
         button_frame = ttk.Frame(self.root)

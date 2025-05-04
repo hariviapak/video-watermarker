@@ -20,6 +20,7 @@ def add_moving_watermark_with_alpha(
         scale: Size of watermark relative to video height
         opacity: Opacity of watermark (0.0 to 1.0)
     """
+
     # Load video
     cap = cv2.VideoCapture(input_video_path)
     if not cap.isOpened():
@@ -41,8 +42,11 @@ def add_moving_watermark_with_alpha(
     if logo.shape[2] == 3:
         logo = cv2.cvtColor(logo, cv2.COLOR_BGR2BGRA)
 
+
+
     # Resize logo
-    logo_h = int(height * scale)
+    speed = int(speed)
+    logo_h = int(height * float(scale))
     logo_w = int(logo.shape[1] * (logo_h / logo.shape[0]))
     logo = cv2.resize(logo, (logo_w, logo_h), interpolation=cv2.INTER_AREA)
 
@@ -65,8 +69,8 @@ def add_moving_watermark_with_alpha(
         y += dy
 
         # Ensure coordinates are within bounds
-        x = max(0, min(x, width - logo_w))
-        y = max(0, min(y, height - logo_h))
+        x = int(round(max(0, min(x, width - logo_w))))
+        y = int(round(max(0, min(y, height - logo_h))))
 
         # Region of Interest
         roi = frame[y:y+logo_h, x:x+logo_w]

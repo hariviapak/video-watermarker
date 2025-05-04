@@ -4,10 +4,10 @@ block_cipher = None
 
 a = Analysis(
     ['src/main.py'],
-    pathex=['.'],  # Add project root to path
-    binaries=[
-        ('C:/path/to/opencv_videoio_ffmpeg*.dll', '.'),  # FFmpeg for OpenCV
-    ],
+    pathex=[],
+    binaries = [
+        ('**/opencv_videoio_ffmpeg*.dll', '.'),  # Recursive search
+    ]
     datas=[],
     hiddenimports=['PIL._tkinter_finder', 'cv2', 'numpy', 'PIL'],
     hookspath=[],
@@ -28,12 +28,20 @@ exe = EXE(
     a.binaries,
     a.zipfiles,
     a.datas,
+    [],
     name='VideoWatermarker',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
+    upx_exclude=[],
+    runtime_tmpdir=None,
     console=False,
-    icon=None,  # Custom icon
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+    icon=None,
     version='file_version_info.txt',
-)
+) 
